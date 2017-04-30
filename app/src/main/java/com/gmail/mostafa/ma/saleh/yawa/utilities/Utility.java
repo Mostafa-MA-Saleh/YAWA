@@ -66,4 +66,13 @@ public class Utility {
         return -1;
     }
 
+    public static int getTheme(int themeCode) {
+        switch (themeCode) {
+            case 1:
+                return R.style.AppThemeDark;
+            default:
+                return R.style.AppTheme;
+        }
+    }
+
 }

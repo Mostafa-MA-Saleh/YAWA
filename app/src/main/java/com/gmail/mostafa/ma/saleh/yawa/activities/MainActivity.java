@@ -1,11 +1,12 @@
 package com.gmail.mostafa.ma.saleh.yawa.activities;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,19 +15,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.gmail.mostafa.ma.saleh.yawa.R;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
 import com.gmail.mostafa.ma.saleh.yawa.adapters.DaysRecyclerAdapter;
 import com.gmail.mostafa.ma.saleh.yawa.adapters.NetworkAdapter;
 import com.gmail.mostafa.ma.saleh.yawa.models.Day;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.GenericArrayType;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -47,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Utility.getTheme(getSharedPreferences("configs", MODE_PRIVATE).getInt("theme", 0)));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -91,4 +90,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
