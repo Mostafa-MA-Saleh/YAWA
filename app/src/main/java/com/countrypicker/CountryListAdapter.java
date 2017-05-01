@@ -16,23 +16,21 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 
-public class CountryListAdapter extends BaseAdapter {
+class CountryListAdapter extends BaseAdapter {
 
-    List<Country> countries;
-    LayoutInflater inflater;
-    private Context context;
+    private List<Country> countries;
+    private LayoutInflater inflater;
 
     /**
      * Constructor
      *
-     * @param context
-     * @param countries
+     * @param context context
+     * @param countries a list of countries
      */
-    public CountryListAdapter(Context context, List<Country> countries) {
+    CountryListAdapter(Context context, List<Country> countries) {
         super();
-        this.context = context;
         this.countries = countries;
-        inflater = (LayoutInflater) this.context
+        inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -43,16 +41,15 @@ public class CountryListAdapter extends BaseAdapter {
      * questions/3042961/how-can-i-get-the-resource-id-of
      * -an-image-if-i-know-its-name
      *
-     * @param drawableName
-     * @return
+     * @param drawableName name of the drawable
+     * @return resId of the drawable
      */
     private int getResId(String drawableName) {
 
         try {
             Class<drawable> res = R.drawable.class;
             Field field = res.getField(drawableName);
-            int drawableId = field.getInt(null);
-            return drawableId;
+            return field.getInt(null);
         } catch (Exception e) {
             Log.e("COUNTRYPICKER", "Failure to get drawable id.", e);
         }
@@ -61,19 +58,16 @@ public class CountryListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return countries.size();
     }
 
     @Override
     public Object getItem(int arg0) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public long getItemId(int arg0) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -88,7 +82,7 @@ public class CountryListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             cell = new Cell();
-            cellView = inflater.inflate(R.layout.row, null);
+            cellView = inflater.inflate(R.layout.row, parent);
             cell.textView = (TextView) cellView.findViewById(R.id.row_title);
             cell.imageView = (ImageView) cellView.findViewById(R.id.row_icon);
             cellView.setTag(cell);
@@ -108,9 +102,9 @@ public class CountryListAdapter extends BaseAdapter {
     /**
      * Holder for the cell
      */
-    static class Cell {
-        public TextView textView;
-        public ImageView imageView;
+    private static class Cell {
+        TextView textView;
+        ImageView imageView;
     }
 
 }

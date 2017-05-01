@@ -85,8 +85,8 @@ public class CountryPicker extends DialogFragment implements
     /**
      * To support show as dialog
      *
-     * @param dialogTitle
-     * @return
+     * @param dialogTitle the title of the dialog
+     * @return the dialog
      */
     public static CountryPicker newInstance(String dialogTitle) {
         CountryPicker picker = new CountryPicker();
@@ -99,7 +99,7 @@ public class CountryPicker extends DialogFragment implements
     /**
      * Set listener
      *
-     * @param listener
+     * @param listener listener
      */
     public void setListener(CountryPickerListener listener) {
         this.listener = listener;
@@ -116,12 +116,12 @@ public class CountryPicker extends DialogFragment implements
     /**
      * Get all countries with code and name from res/raw/countries.json
      *
-     * @return
+     * @return a list of countries
      */
     private List<Country> getAllCountries() {
         if (allCountriesList == null) {
             try {
-                allCountriesList = new ArrayList<Country>();
+                allCountriesList = new ArrayList<>();
 
                 // Read from local file
                 String allCountriesString = readFileAsString(getActivity());
@@ -142,7 +142,7 @@ public class CountryPicker extends DialogFragment implements
                 Collections.sort(allCountriesList, this);
 
                 // Initialize selected countries with all countries
-                selectedCountriesList = new ArrayList<Country>();
+                selectedCountriesList = new ArrayList<>();
                 selectedCountriesList.addAll(allCountriesList);
 
                 // Return
@@ -162,7 +162,7 @@ public class CountryPicker extends DialogFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate view
-        View view = inflater.inflate(R.layout.country_picker, null);
+        View view = inflater.inflate(R.layout.country_picker, container);
 
         // Get countries from the json
         getAllCountries();
@@ -177,6 +177,7 @@ public class CountryPicker extends DialogFragment implements
                     R.dimen.cp_dialog_width);
             int height = getResources().getDimensionPixelSize(
                     R.dimen.cp_dialog_height);
+            //noinspection ConstantConditions
             getDialog().getWindow().setLayout(width, height);
         }
 
@@ -231,7 +232,7 @@ public class CountryPicker extends DialogFragment implements
      * Search allCountriesList contains text and put result into
      * selectedCountriesList
      *
-     * @param text
+     * @param text search term
      */
     @SuppressLint("DefaultLocale")
     private void search(String text) {
