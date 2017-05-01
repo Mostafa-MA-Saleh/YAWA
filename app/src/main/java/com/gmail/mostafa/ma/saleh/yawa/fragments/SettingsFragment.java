@@ -11,11 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.countrypicker.CountryPicker;
-import com.countrypicker.CountryPickerListener;
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.City;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPicker;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPickerListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
