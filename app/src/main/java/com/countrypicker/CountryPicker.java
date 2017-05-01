@@ -60,25 +60,20 @@ public class CountryPicker extends DialogFragment implements
      * Convenient function to get currency code from country code currency code
      * is in English locale
      *
-     * @param countryCode
-     * @return
+     * @param countryCode code for a country
+     * @return the currency of a given country code
      */
     public static Currency getCurrencyCode(String countryCode) {
-        try {
-            return Currency.getInstance(new Locale("en", countryCode));
-        } catch (Exception e) {
-
-        }
-        return null;
+        return Currency.getInstance(new Locale("en", countryCode));
     }
 
     /**
      * R.string.countries is a json string which is Base64 encoded to avoid
      * special characters in XML. It's Base64 decoded here to get original json.
      *
-     * @param context
-     * @return
-     * @throws java.io.IOException
+     * @param context context
+     * @return file as string
+     * @throws java.io.IOException if there's something wrong with the file
      */
     private static String readFileAsString(Context context)
             throws java.io.IOException {
@@ -205,6 +200,7 @@ public class CountryPicker extends DialogFragment implements
                     Country country = selectedCountriesList.get(position);
                     listener.onSelectCountry(country.getName(),
                             country.getCode());
+                    dismiss();
                 }
             }
         });

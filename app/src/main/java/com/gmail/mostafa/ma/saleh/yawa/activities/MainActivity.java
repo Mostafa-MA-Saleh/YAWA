@@ -42,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tv_temp_min) TextView tvTempMin;
     @BindView(R.id.tv_description) TextView tvDescription;
     @BindView(R.id.img_weather_icon) ImageView imgWeatherIcon;
-    private SharedPreferences preferences;
     private DaysRecyclerAdapter daysRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme(Utility.getTheme(Integer.parseInt(preferences.getString("theme", "0"))));
         setContentView(R.layout.activity_main);
+        setTitle(R.string.app_name_long);
         ButterKnife.bind(this);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         rvDays.setLayoutManager(new LinearLayoutManager(this));
         String requestURL =
                 "http://api.openweathermap.org/data/2.5/forecast/daily?id=" +
-                        preferences.getString("country", "524901") +
+                        preferences.getString("city", "524901") +
                         preferences.getString("temp_unit", "&units=metric") +
                         "&cnt=16" +
                         "&APPID=026ee82032707259db948706d2c48df2";

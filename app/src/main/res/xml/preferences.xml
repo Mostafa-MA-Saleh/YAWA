@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Appearance">
-        <ListPreference
-            android:defaultValue="@string/default_theme"
-            android:entries="@array/themes"
-            android:entryValues="@array/themes_values"
-            android:key="theme"
-            android:title="@string/theme" />
+    <PreferenceCategory android:title="Location">
+        <Preference
+            android:key="country"
+            android:summary="Choose a country"
+            android:title="Country" />
+        <Preference
+            android:dependency="country"
+            android:key="city"
+            android:summary="Choose a city"
+            android:title="City" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Units">
@@ -16,17 +19,18 @@
             android:entries="@array/temp_units"
             android:entryValues="@array/temp_units_values"
             android:key="temp_unit"
+            android:summary="Temperature display unit "
             android:title="Temperature" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Location">
-        <Preference
-            android:key="country"
-            android:title="Country" />
-        <Preference
-            android:dependency="country"
-            android:key="city"
-            android:title="City" />
+    <PreferenceCategory android:title="Appearance">
+        <ListPreference
+            android:defaultValue="@string/default_theme"
+            android:entries="@array/themes"
+            android:entryValues="@array/themes_values"
+            android:key="theme"
+            android:summary="Choose the application theme"
+            android:title="@string/theme" />
     </PreferenceCategory>
 
 </PreferenceScreen>
