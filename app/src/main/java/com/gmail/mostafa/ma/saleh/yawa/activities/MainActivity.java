@@ -1,7 +1,9 @@
 package com.gmail.mostafa.ma.saleh.yawa.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,21 +35,24 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static int RC_SETTINGS = 22;
     @BindView(R.id.days_rv) RecyclerView rvDays;
     @BindView(R.id.tv_date) TextView tvDate;
     @BindView(R.id.tv_temp_max) TextView tvTempMax;
     @BindView(R.id.tv_temp_min) TextView tvTempMin;
     @BindView(R.id.tv_description) TextView tvDescription;
     @BindView(R.id.img_weather_icon) ImageView imgWeatherIcon;
-
+    private SharedPreferences preferences;
     private DaysRecyclerAdapter daysRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(Utility.getTheme(getSharedPreferences("configs", MODE_PRIVATE).getInt("theme", 0)));
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        setTheme(Utility.getTheme(Integer.parseInt(preferences.getString("theme", "0"))));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
@@ -55,7 +60,12 @@ public class MainActivity extends AppCompatActivity {
         daysRecyclerAdapter = new DaysRecyclerAdapter(this, null);
         rvDays.setAdapter(daysRecyclerAdapter);
         rvDays.setLayoutManager(new LinearLayoutManager(this));
-        String requestURL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Alexandria,EG&units=metric&cnt=16&APPID=026ee82032707259db948706d2c48df2";
+        String requestURL =
+                "http://api.openweathermap.org/data/2.5/forecast/daily?q=" +
+                        "Alexandria,EG" +
+                        preferences.getString("temp_unit", "&units=metric") +
+                        "&cnt=16" +
+                        "&APPID=026ee82032707259db948706d2c48df2";
         JsonObjectRequest request = new JsonObjectRequest(requestURL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -94,9 +104,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivityForResult(new Intent(this, SettingsActivity.class), RC_SETTINGS);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SETTINGS && resultCode == RESULT_OK) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 }

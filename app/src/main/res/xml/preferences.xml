@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Appearance">
+        <ListPreference
+            android:defaultValue="@string/default_theme"
+            android:entries="@array/themes"
+            android:entryValues="@array/themes_values"
+            android:key="theme"
+            android:title="@string/theme" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Units">
+        <ListPreference
+            android:defaultValue="@string/default_temp_unit"
+            android:entries="@array/temp_units"
+            android:entryValues="@array/temp_units_values"
+            android:key="temp_unit"
+            android:title="Temperature" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
