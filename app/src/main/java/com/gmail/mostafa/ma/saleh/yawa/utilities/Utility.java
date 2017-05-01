@@ -1,6 +1,21 @@
 package com.gmail.mostafa.ma.saleh.yawa.utilities;
 
+import android.content.res.Resources;
+
 import com.gmail.mostafa.ma.saleh.yawa.R;
+import com.gmail.mostafa.ma.saleh.yawa.models.City;
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Mostafa Saleh on 04/29/2017.
@@ -73,6 +88,40 @@ public class Utility {
             default:
                 return R.style.AppTheme;
         }
+    }
+
+    public static City[] getCountryCities(Resources resources, String countryCode) {
+        ArrayList<City> countryCities = new ArrayList<>();
+        City[] cities = new Gson().fromJson(readJSONFromResources(resources), City[].class);
+        for (City city : cities) {
+            if (city.country.equals(countryCode)) {
+                countryCities.add(city);
+            }
+        }
+        Collections.sort(countryCities, new Comparator<City>() {
+            @Override
+            public int compare(City o1, City o2) {
+                return o1.name.compareTo(o2.name);
+            }
+        });
+        return countryCities.toArray(new City[0]);
+    }
+
+    private static String readJSONFromResources(Resources resources) {
+        InputStream is = resources.openRawResource(R.raw.city_list);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return writer.toString();
     }
 
 }

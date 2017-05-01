@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         rvDays.setAdapter(daysRecyclerAdapter);
         rvDays.setLayoutManager(new LinearLayoutManager(this));
         String requestURL =
-                "http://api.openweathermap.org/data/2.5/forecast/daily?q=" +
-                        "Alexandria,EG" +
+                "http://api.openweathermap.org/data/2.5/forecast/daily?id=" +
+                        preferences.getString("country", "524901") +
                         preferences.getString("temp_unit", "&units=metric") +
                         "&cnt=16" +
                         "&APPID=026ee82032707259db948706d2c48df2";
