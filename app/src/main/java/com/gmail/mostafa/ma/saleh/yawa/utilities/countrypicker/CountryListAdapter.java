@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
@@ -72,39 +71,29 @@ class CountryListAdapter extends BaseAdapter {
     }
 
     /**
-     * Return row for each country
+     * Return country_picker_row for each country
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View cellView = convertView;
-        Cell cell;
+        TextView cell;
         Country country = countries.get(position);
 
         if (convertView == null) {
-            cell = new Cell();
-            cellView = inflater.inflate(R.layout.row, parent);
-            cell.textView = (TextView) cellView.findViewById(R.id.row_title);
-            cell.imageView = (ImageView) cellView.findViewById(R.id.row_icon);
+            cellView = inflater.inflate(R.layout.country_picker_row, null);
+            cell = (TextView) cellView.findViewById(R.id.row_title);
             cellView.setTag(cell);
         } else {
-            cell = (Cell) cellView.getTag();
+            cell = (TextView) cellView.getTag();
         }
 
-        cell.textView.setText(country.getName());
+        cell.setText(country.getName());
 
         // Load drawable dynamically from country code
         String drawableName = "flag_"
                 + country.getCode().toLowerCase(Locale.ENGLISH);
-        cell.imageView.setImageResource(getResId(drawableName));
+        cell.setCompoundDrawablesWithIntrinsicBounds(getResId(drawableName), 0, 0, 0);
         return cellView;
-    }
-
-    /**
-     * Holder for the cell
-     */
-    private static class Cell {
-        TextView textView;
-        ImageView imageView;
     }
 
 }

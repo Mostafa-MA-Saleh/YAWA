@@ -4,12 +4,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.City;
@@ -22,26 +23,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Preference countryPref;
     private Preference cityPref;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
         countryPref = findPreference("country");
         countryPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                FragmentManager fm = ((AppCompatActivity) getActivity()).getSupportFragmentManager();
                 CountryPicker picker = CountryPicker.newInstance("Select City");
-                picker.show(fm, "COUNTRY_PICKER");
+                picker.show(getFragmentManager(), "COUNTRY_PICKER");
                 picker.setListener(new CountryPickerListener() {
                     @Override
                     public void onSelectCountry(String name, final String code) {
-                        preference.getEditor().putString(preference.getKey(), code).apply();
+                        PreferenceManager
+                                .getDefaultSharedPreferences(getContext())
+                                .edit()
+                                .putString(preference.getKey(), code)
+                                .apply();
                     }
                 });
                 return true;
@@ -56,6 +59,14 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
+
+        findPreference("theme").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                getActivity().recreate();
+                return true;
+            }
+        });
     }
 
     private void showCitiesDialog(final City[] cities, final Preference preference) {
@@ -68,13 +79,23 @@ public class SettingsFragment extends PreferenceFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                preference.getEditor().putString(preference.getKey(), cities[which].id).apply();
+                                PreferenceManager
+                                        .getDefaultSharedPreferences(getContext())
+                                        .edit()
+                                        .putString(preference.getKey(), cities[which].id)
+                                        .apply();
                                 dialog.dismiss();
                             }
                         }
                 )
                 .create()
                 .show();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.settings);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private class Task extends AsyncTask<Void, Void, City[]> {

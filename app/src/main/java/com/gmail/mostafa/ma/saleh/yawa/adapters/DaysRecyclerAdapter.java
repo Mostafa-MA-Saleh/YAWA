@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
-import com.gmail.mostafa.ma.saleh.yawa.models.Day;
 import com.gmail.mostafa.ma.saleh.yawa.R;
+import com.gmail.mostafa.ma.saleh.yawa.models.Day;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,10 +20,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by Mostafa Saleh on 04/29/2017.
- */
 
 public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapter.ViewHolder> {
 
@@ -78,6 +74,11 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
         int index = mDataSet.indexOf(day);
         mDataSet.remove(day);
         notifyItemRemoved(index);
+    }
+
+    public void clear() {
+        mDataSet.clear();
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

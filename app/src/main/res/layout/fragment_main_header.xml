@@ -5,58 +5,54 @@
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
     android:elevation="5dp"
-    android:paddingTop="10dp"
     android:paddingBottom="10dp"
+    android:paddingEnd="25dp"
     android:paddingStart="25dp"
-    android:paddingEnd="25dp">
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@android:color/white"
-        android:text="Today, September 15"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_temp_max"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_below="@id/tv_date"
-        android:textSize="60sp"
+        android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
-        android:text="20°"/>
+        android:textSize="60sp" />
 
     <TextView
         android:id="@+id/tv_temp_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_below="@+id/tv_temp_max"
-        android:textSize="40sp"
+        android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
-        android:text="10°"/>
+        android:textSize="40sp" />
 
     <ImageView
         android:id="@+id/img_weather_icon"
-        android:src="@drawable/art_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tv_date"/>
+        android:layout_below="@+id/tv_date"
+        android:src="@drawable/art_clear" />
 
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/img_weather_icon"
-        android:layout_alignStart="@+id/img_weather_icon"
         android:layout_alignEnd="@+id/img_weather_icon"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
+        android:layout_alignStart="@+id/img_weather_icon"
+        android:layout_below="@+id/img_weather_icon"
         android:gravity="center"
-        android:text="Clear"/>
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
