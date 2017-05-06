@@ -1,65 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:padding="10dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/img_weather_icon"
-        android:src="@mipmap/ic_launcher"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_alignParentStart="true"
         android:layout_marginEnd="10dp"
-        android:layout_alignParentStart="true"/>
+        android:contentDescription="@string/weather_status_icon"
+        android:src="@mipmap/ic_launcher" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/img_weather_icon">
+        android:layout_toEndOf="@+id/img_weather_icon"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Saturday" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true">
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_temp_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
             android:layout_gravity="center"
-            android:textStyle="bold"
+            android:layout_margin="2dp"
             android:textSize="20sp"
-            android:text="40°" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_temp_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
             android:layout_gravity="center"
-            android:text="26°" />
+            android:layout_margin="2dp" />
 
     </LinearLayout>
 </RelativeLayout>

@@ -8,4 +8,8 @@
 
     <string name="default_temp_unit">&amp;units=metric</string>
     <string name="default_theme">0</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="weather_status_icon">Weather Status Icon</string>
 </resources>

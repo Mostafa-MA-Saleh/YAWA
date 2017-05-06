@@ -25,11 +25,16 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
 
     private List<Day> mDataSet;
     private Context mContext;
+    private OnItemClickListener onItemClickListener;
 
     public DaysRecyclerAdapter(Context context, @Nullable List<Day> days){
         if (days == null) days = new ArrayList<>();
         mDataSet = new ArrayList<>(days);
         mContext = context;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -39,8 +44,8 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Day d = mDataSet.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Day d = mDataSet.get(position);
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, position+1);
         holder.tvDay.setText(c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
@@ -48,6 +53,13 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
         holder.tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(d.temp.min)));
         holder.tvDescription.setText(d.weather[0].main);
         holder.imgWeatherIcon.setImageResource(Utility.getIconResourceForWeatherCondition(d.weather[0].id));
+        holder.row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClick(v, d, holder.getAdapterPosition());
+            }
+        });
     }
 
     @Override
@@ -81,6 +93,10 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
         notifyDataSetChanged();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, Day day, int position);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.img_weather_icon) ImageView imgWeatherIcon;
@@ -88,6 +104,8 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
         @BindView(R.id.tv_description) TextView tvDescription;
         @BindView(R.id.tv_temp_max) TextView tvTempMax;
         @BindView(R.id.tv_temp_min) TextView tvTempMin;
+        @BindView(R.id.row)
+        View row;
 
         ViewHolder(View v) {
             super(v);

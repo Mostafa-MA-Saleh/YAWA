@@ -78,6 +78,16 @@ public class MainFragment extends Fragment {
                 refresh();
             }
         });
+        daysRecyclerAdapter.setOnItemClickListener(new DaysRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, Day day, int position) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(android.R.id.content, DetailsFragment.newInstance(day, position))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         return mainView;
     }
 

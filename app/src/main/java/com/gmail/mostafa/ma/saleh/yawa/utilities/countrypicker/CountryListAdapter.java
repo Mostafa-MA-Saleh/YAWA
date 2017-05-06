@@ -80,7 +80,7 @@ class CountryListAdapter extends BaseAdapter {
         Country country = countries.get(position);
 
         if (convertView == null) {
-            cellView = inflater.inflate(R.layout.country_picker_row, null);
+            cellView = inflater.inflate(R.layout.country_picker_row, parent, false);
             cell = (TextView) cellView.findViewById(R.id.row_title);
             cellView.setTag(cell);
         } else {

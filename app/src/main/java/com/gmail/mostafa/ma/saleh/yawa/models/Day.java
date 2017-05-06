@@ -1,12 +1,8 @@
 package com.gmail.mostafa.ma.saleh.yawa.models;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-/**
- * Created by Mostafa Saleh on 04/29/2017.
- */
-
-public class Day {
+public class Day implements Serializable {
 
     public long dt;
     public float pressure;
@@ -17,7 +13,7 @@ public class Day {
     public Temperature temp;
     public Weather[] weather;
 
-    public class Temperature {
+    public class Temperature implements Serializable {
         public float day;
         public float min;
         public float max;
@@ -26,7 +22,7 @@ public class Day {
         public float morn;
     }
 
-    public class Weather{
+    public class Weather implements Serializable {
         public int id;
         public String main;
         public String description;
