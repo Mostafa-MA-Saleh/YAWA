@@ -7,4 +7,6 @@
     <color name="colorDarkPrimary">#01579b</color>
     <color name="colorDarkPrimaryDark">#014980</color>
     <color name="colorDarkAccent">#FF4081</color>
+
+    <color name="light_grey">#DDDDDD</color>
 </resources>

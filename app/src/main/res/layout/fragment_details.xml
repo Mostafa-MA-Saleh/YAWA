@@ -1,4 +1,5 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,11 +8,164 @@
     android:padding="16dp"
     tools:context="com.gmail.mostafa.ma.saleh.yawa.fragments.DetailsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent" />
 
-</FrameLayout>
+    <TableLayout
+        android:id="@+id/overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="0,1">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/tv_temp_max"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|bottom"
+                android:textSize="90sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_status_icon"
+                android:src="@drawable/art_clear" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/tv_temp_min"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_weather_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="40sp" />
+        </TableRow>
+
+    </TableLayout>
+
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/aprg_clouds"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/overview"
+        android:layout_marginTop="20dp"
+        custom:arc_bottom_text="Clouds"
+        custom:arc_bottom_text_size="14sp"
+        custom:arc_finished_color="?colorPrimary"
+        custom:arc_max="100"
+        custom:arc_progress="10"
+        custom:arc_stroke_width="6dp"
+        custom:arc_text_color="?android:textColorSecondary"
+        custom:arc_unfinished_color="@color/light_grey" />
+
+    <TableLayout
+        android:id="@+id/details"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/aprg_clouds"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/aprg_clouds"
+        android:layout_toStartOf="@+id/aprg_clouds">
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="@string/pressure_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginStart="1dp"
+                android:text="@string/colon"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_pressure"
+                android:layout_marginStart="7dp"
+                android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="@string/humidity_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginStart="1dp"
+                android:text="@string/colon"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_humidity"
+                android:layout_marginStart="7dp"
+                android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="@string/wind_direction_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginStart="1dp"
+                android:text="@string/colon"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_wind_direction"
+                android:layout_marginStart="7dp"
+                android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="@string/wind_speed_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_marginStart="1dp"
+                android:text="@string/colon"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_wind_speed"
+                android:layout_marginStart="7dp"
+                android:textSize="18sp" />
+        </TableRow>
+
+    </TableLayout>
+
+</RelativeLayout>

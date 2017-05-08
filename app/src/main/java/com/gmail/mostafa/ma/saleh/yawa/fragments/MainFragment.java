@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -81,9 +82,11 @@ public class MainFragment extends Fragment {
         daysRecyclerAdapter.setOnItemClickListener(new DaysRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Day day, int position) {
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DATE, position + 1);
                 getFragmentManager()
                         .beginTransaction()
-                        .add(android.R.id.content, DetailsFragment.newInstance(day, position))
+                        .add(android.R.id.content, DetailsFragment.newInstance(day, c.getTime()))
                         .addToBackStack(null)
                         .commit();
             }
@@ -123,8 +126,10 @@ public class MainFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError e) {
-                        refreshLayout.setRefreshing(false);
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        getFragmentManager()
+                                .beginTransaction()
+                                .replace(android.R.id.content, new NoInternetFragment())
+                                .commit();
                     }
                 });
         NetworkAdapter.getInstance().getRequestQueue(getContext()).add(request);

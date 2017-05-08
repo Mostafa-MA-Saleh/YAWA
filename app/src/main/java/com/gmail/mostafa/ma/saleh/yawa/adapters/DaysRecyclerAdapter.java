@@ -93,6 +93,10 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
         notifyDataSetChanged();
     }
 
+    public List<Day> getDataSet() {
+        return mDataSet;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view, Day day, int position);
     }
