@@ -10,14 +10,14 @@ import android.view.MenuItem;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.fragments.MainFragment;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setTheme(Utility.getTheme(Integer.parseInt(preferences.getString("theme", "0"))));
+        setTheme(Utils.getTheme(Integer.parseInt(preferences.getString("theme", "0"))));
         super.onCreate(savedInstanceState);
         assert getSupportActionBar() != null;
         getSupportActionBar().setElevation(0);

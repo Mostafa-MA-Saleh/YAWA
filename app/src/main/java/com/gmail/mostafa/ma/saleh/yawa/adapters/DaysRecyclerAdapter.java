@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.Day;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapter.ViewHolder> {
 
@@ -52,12 +53,26 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
         holder.tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(d.temp.max)));
         holder.tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(d.temp.min)));
         holder.tvDescription.setText(d.weather[0].main);
-        holder.imgWeatherIcon.setImageResource(Utility.getIconResourceForWeatherCondition(d.weather[0].id));
+        holder.imgWeatherIcon.setImageResource(Utils.getIconResourceForWeatherCondition(d.weather[0].id));
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null)
                     onItemClickListener.onItemClick(v, d, holder.getAdapterPosition());
+            }
+        });
+        holder.imgWeatherIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTooltip.Builder(mContext)
+                        .anchorView(v)
+                        .animated(true)
+                        .transparentOverlay(true)
+                        .text("Testing tooltips!!")
+                        .dismissOnOutsideTouch(true)
+                        .showArrow(true)
+                        .build()
+                        .show();
             }
         });
     }

@@ -24,7 +24,7 @@ class CountryListAdapter extends BaseAdapter {
      * Constructor
      *
      * @param context context
-     * @param countries a list of countries
+     * @param countries a days of countries
      */
     CountryListAdapter(Context context, List<Country> countries) {
         super();
@@ -81,7 +81,7 @@ class CountryListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             cellView = inflater.inflate(R.layout.country_picker_row, parent, false);
-            cell = (TextView) cellView.findViewById(R.id.row_title);
+            cell = cellView.findViewById(R.id.row_title);
             cellView.setTag(cell);
         } else {
             cell = (TextView) cellView.getTag();

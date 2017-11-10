@@ -12,7 +12,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 
-public class Utility {
+public class Utils {
 
     public static int getIconResourceForWeatherCondition(int weatherId) {
         // Based on weather code data found at:

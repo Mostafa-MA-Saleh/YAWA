@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.City;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPicker;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPickerListener;
 import com.google.gson.Gson;
@@ -120,7 +120,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         protected City[] doInBackground(Void... params) {
             String countryCode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(countryPref.getKey(), "EG");
             ArrayList<City> countryCities = new ArrayList<>();
-            City[] cities = new Gson().fromJson(Utility.readJSONFromResources(getResources()), City[].class);
+            City[] cities = new Gson().fromJson(Utils.readJSONFromResources(getResources()), City[].class);
             for (City city : cities) {
                 if (isCancelled()) return new City[0];
                 if (city.country.equals(countryCode)) {

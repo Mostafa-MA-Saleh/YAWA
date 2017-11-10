@@ -116,7 +116,7 @@ public class CountryPicker extends DialogFragment implements
     /**
      * Get all countries with code and name from res/raw/countries.json
      *
-     * @return a list of countries
+     * @return a days of countries
      */
     private List<Country> getAllCountries() {
         if (allCountriesList == null) {
@@ -129,7 +129,7 @@ public class CountryPicker extends DialogFragment implements
                 JSONObject jsonObject = new JSONObject(allCountriesString);
                 Iterator<?> keys = jsonObject.keys();
 
-                // Add the data to all countries list
+                // Add the data to all countries days
                 while (keys.hasNext()) {
                     String key = (String) keys.next();
                     Country country = new Country();
@@ -138,7 +138,7 @@ public class CountryPicker extends DialogFragment implements
                     allCountriesList.add(country);
                 }
 
-                // Sort the all countries list based on country name
+                // Sort the all countries days based on country name
                 Collections.sort(allCountriesList, this);
 
                 // Initialize selected countries with all countries
@@ -182,9 +182,9 @@ public class CountryPicker extends DialogFragment implements
         }
 
         // Get view components
-        searchEditText = (EditText) view
+        searchEditText = view
                 .findViewById(R.id.country_picker_search);
-        countryListView = (ListView) view
+        countryListView = view
                 .findViewById(R.id.country_picker_listview);
 
         // Set adapter
@@ -249,7 +249,7 @@ public class CountryPicker extends DialogFragment implements
     }
 
     /**
-     * Support sorting the countries list
+     * Support sorting the countries days
      */
     @Override
     public int compare(Country lhs, Country rhs) {

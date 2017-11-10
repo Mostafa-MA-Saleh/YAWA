@@ -16,20 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.adapters.DaysRecyclerAdapter;
-import com.gmail.mostafa.ma.saleh.yawa.adapters.NetworkAdapter;
 import com.gmail.mostafa.ma.saleh.yawa.models.Day;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener;
+import com.gmail.mostafa.ma.saleh.yawa.retrofit.RetrofitManager;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,6 +50,7 @@ public class MainFragment extends Fragment {
     SwipeRefreshLayout refreshLayout;
 
     private DaysRecyclerAdapter daysRecyclerAdapter;
+    private OnFinishedListener<Day[]> onFinishedListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,43 +91,39 @@ public class MainFragment extends Fragment {
     private void refresh() {
         daysRecyclerAdapter.clear();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String requestURL =
-                "http://api.openweathermap.org/data/2.5/forecast/daily?id=" +
-                        preferences.getString("city", "524901") +
-                        preferences.getString("temp_unit", "&units=metric") +
-                        "&cnt=16" +
-                        "&APPID=026ee82032707259db948706d2c48df2";
-        JsonObjectRequest request = new JsonObjectRequest(requestURL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            tvDate.setText(new SimpleDateFormat("'Today,' MMMM dd", Locale.getDefault()).format(new Date()));
-                            Day[] days = new Gson().fromJson(response.getJSONArray("list").toString(), Day[].class);
-                            tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.max)));
-                            tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.min)));
-                            tvDescription.setText(days[0].weather[0].main);
-                            imgWeatherIcon.setImageResource(Utility.getArtResourceForWeatherCondition(days[0].weather[0].id));
-                            for (int i = 1; i < days.length; i++)
-                                daysRecyclerAdapter.add(days[i]);
-                        } catch (JSONException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                        refreshLayout.setRefreshing(false);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError e) {
-                        getFragmentManager()
-                                .beginTransaction()
-                                .replace(android.R.id.content, new NoInternetFragment())
-                                .commit();
-                    }
-                });
-        NetworkAdapter.getInstance().getRequestQueue(getContext()).add(request);
+        String cityId = preferences.getString("city", "524901");
+        String tempUnit = preferences.getString("temp_unit", "metric");
+        if (onFinishedListener != null) {
+            onFinishedListener.cancel();
+        }
+        onFinishedListener = new OnFinishedListener<Day[]>() {
+            @Override
+            public void onSuccess(Day[] days) {
+                tvDate.setText(new SimpleDateFormat("'Today,' MMMM dd", Locale.getDefault()).format(new Date()));
+                tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.max)));
+                tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.min)));
+                tvDescription.setText(days[0].weather[0].main);
+                imgWeatherIcon.setImageResource(Utils.getArtResourceForWeatherCondition(days[0].weather[0].id));
+                for (int i = 1; i < days.length; i++)
+                    daysRecyclerAdapter.add(days[i]);
+                refreshLayout.setRefreshing(false);
+            }
 
+            @Override
+            public void onFailure(String message) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(android.R.id.content, new NoInternetFragment())
+                        .commit();
+            }
+
+            @Override
+            public void onComplete(@Nullable Day[] args, @Nullable String message) {
+                super.onComplete(args, message);
+                onFinishedListener = null;
+            }
+        };
+        RetrofitManager.getInstance().getForecast(cityId, tempUnit, onFinishedListener);
     }
 
 

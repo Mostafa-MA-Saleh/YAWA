@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.Day;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.Utility;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,8 +27,6 @@ public class DetailsFragment extends Fragment {
     private static final String ARG_DAY = "param_day";
     private static final String ARG_DATE = "param_date";
 
-    @BindView(R.id.tv_description)
-    TextView tvDescription;
     @BindView(R.id.tv_temp_max)
     TextView tvTempMax;
     @BindView(R.id.tv_temp_min)
@@ -78,12 +76,11 @@ public class DetailsFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, mainView);
         getActivity().setTitle(new SimpleDateFormat("EEEE, MMMM dd", Locale.getDefault()).format(mDate));
-        tvDescription.setText(mDay.weather[0].description);
         tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(mDay.temp.max)));
         tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(mDay.temp.min)));
         tvStatus.setText(mDay.weather[0].main);
         tvHumidity.setText(mDay.humidity == 0.0 ? "N/A" : String.format(Locale.getDefault(), "%d%%", Math.round(mDay.humidity)));
-        imgWeatherStatus.setImageResource(Utility.getArtResourceForWeatherCondition(mDay.weather[0].id));
+        imgWeatherStatus.setImageResource(Utils.getArtResourceForWeatherCondition(mDay.weather[0].id));
         tvPressure.setText(String.format(Locale.getDefault(), "%d %s", Math.round(mDay.pressure), getString(R.string.pressure_unit)));
         tvWindSpeed.setText(String.format(Locale.getDefault(), "%d %s", Math.round(mDay.speed), getWindSpeedUnit()));
         tvWindDirection.setText(getDirection(mDay.deg));

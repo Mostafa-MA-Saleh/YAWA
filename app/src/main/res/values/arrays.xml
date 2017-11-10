@@ -18,8 +18,8 @@
     </string-array>
 
     <string-array name="temp_units_values">
-        <item>&amp;units=metric</item>
-        <item>&amp;units=imperial</item>
+        <item>metric</item>
+        <item>imperial</item>
         <item />
     </string-array>
 
