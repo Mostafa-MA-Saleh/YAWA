@@ -17,11 +17,5 @@ public class City implements Serializable {
     @SerializedName("name")
     @Expose
     public String name;
-    @SerializedName("coord")
-    @Expose
-    public LatLng coordinates;
-    @SerializedName("country")
-    @Expose
-    public String country;
 
 }

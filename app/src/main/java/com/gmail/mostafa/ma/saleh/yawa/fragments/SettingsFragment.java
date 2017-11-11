@@ -19,9 +19,11 @@ import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPicker;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPickerListener;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -118,29 +120,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         @Override
         protected City[] doInBackground(Void... params) {
-            String countryCode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(countryPref.getKey(), "EG");
-            ArrayList<City> countryCities = new ArrayList<>();
-            City[] cities = new Gson().fromJson(Utils.readJSONFromResources(getResources()), City[].class);
-            for (City city : cities) {
-                if (isCancelled()) return new City[0];
-                if (city.country.equals(countryCode)) {
-                    countryCities.add(city);
-                }
+            try {
+                String countryCode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(countryPref.getKey(), "EG");
+                String json = Utils.readJSONFromResources(getResources());
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray cityArray = jsonObject.optJSONArray(countryCode);
+                return new Gson().fromJson(cityArray.toString(), City[].class);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return new City[0];
             }
-            Collections.sort(countryCities, new Comparator<City>() {
-                @Override
-                public int compare(City o1, City o2) {
-                    return o1.name.compareTo(o2.name);
-                }
-            });
-            return countryCities.toArray(new City[0]);
         }
 
         @Override
         protected void onPostExecute(City[] cities) {
             super.onPostExecute(cities);
             progressDialog.dismiss();
-            showCitiesDialog(cities, cityPref);
+            if (!isCancelled()) {
+                showCitiesDialog(cities, cityPref);
+            }
         }
     }
 }
