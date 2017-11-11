@@ -1,19 +1,22 @@
 package com.gmail.mostafa.ma.saleh.yawa.fragments;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.City;
+import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.DialogUtils;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPicker;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPickerListener;
@@ -57,7 +60,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         cityPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new Task().execute();
+                final Dialog progressDialog = DialogUtils.showProgressDialog(getContext());
+                getCitiesList(new OnFinishedListener<City[]>() {
+                    @Override
+                    public void onSuccess(City[] arg) {
+                        showCitiesDialog(arg);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable City[] args, @Nullable String message) {
+                        progressDialog.dismiss();
+                        super.onComplete(args, message);
+                    }
+                });
                 return false;
             }
         });
@@ -71,7 +91,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void showCitiesDialog(final City[] cities, final Preference preference) {
+    private void showCitiesDialog(final City[] cities) {
         final ArrayList<String> citiesNames = new ArrayList<>();
         for (City city : cities) citiesNames.add(city.name);
         new AlertDialog.Builder(getActivity())
@@ -84,7 +104,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 PreferenceManager
                                         .getDefaultSharedPreferences(getContext())
                                         .edit()
-                                        .putString(preference.getKey(), cities[which].id)
+                                        .putString(cityPref.getKey(), cities[which].id)
                                         .apply();
                                 dialog.dismiss();
                             }
@@ -100,45 +120,32 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    private class Task extends AsyncTask<Void, Void, City[]> {
-
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Loading Cities List...");
-            progressDialog.show();
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    Task.this.cancel(true);
+    private void getCitiesList(final OnFinishedListener<City[]> onFinishedListener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String countryCode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(countryPref.getKey(), "EG");
+                    String json = Utils.readJSONFromResources(getResources());
+                    JSONObject jsonObject = new JSONObject(json);
+                    final JSONArray cityArray = jsonObject.optJSONArray(countryCode);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onFinishedListener.onComplete(new Gson().fromJson(cityArray.toString(), City[].class), null);
+                        }
+                    });
+                } catch (final JSONException e) {
+                    e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onFinishedListener.onComplete(null, e.getLocalizedMessage());
+                        }
+                    });
                 }
-            });
-        }
-
-        @Override
-        protected City[] doInBackground(Void... params) {
-            try {
-                String countryCode = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(countryPref.getKey(), "EG");
-                String json = Utils.readJSONFromResources(getResources());
-                JSONObject jsonObject = new JSONObject(json);
-                JSONArray cityArray = jsonObject.optJSONArray(countryCode);
-                return new Gson().fromJson(cityArray.toString(), City[].class);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return new City[0];
             }
-        }
+        }).start();
 
-        @Override
-        protected void onPostExecute(City[] cities) {
-            super.onPostExecute(cities);
-            progressDialog.dismiss();
-            if (!isCancelled()) {
-                showCitiesDialog(cities, cityPref);
-            }
-        }
     }
 }
