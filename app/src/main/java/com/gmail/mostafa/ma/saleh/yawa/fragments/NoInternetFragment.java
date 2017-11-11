@@ -2,33 +2,38 @@ package com.gmail.mostafa.ma.saleh.yawa.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NoInternetFragment extends Fragment {
 
-    public NoInternetFragment() {
-        // Required empty public constructor
+    public static NoInternetFragment newInstance() {
+        return new NoInternetFragment();
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_no_internet, container, false);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View mainView = inflater.inflate(R.layout.fragment_no_internet, container, false);
-        ButterKnife.bind(this, mainView);
-        return mainView;
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
     }
 
     @OnClick(R.id.btn_retry_connection)
     public void onRetryClick() {
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainFragment()).commit();
+        Utils.replaceFragment(getFragmentManager(), MainFragment.newInstance(), false);
     }
 
 }

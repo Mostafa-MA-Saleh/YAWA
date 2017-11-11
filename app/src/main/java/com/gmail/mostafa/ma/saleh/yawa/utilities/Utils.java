@@ -1,6 +1,11 @@
 package com.gmail.mostafa.ma.saleh.yawa.utilities;
 
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
 
@@ -72,9 +77,10 @@ public class Utils {
         return -1;
     }
 
-    public static int getTheme(int themeCode) {
+    public static int getTheme() {
+        String themeCode = SharedPreferencesManager.getInstance().getTheme();
         switch (themeCode) {
-            case 1:
+            case "1":
                 return R.style.AppThemeDark;
             default:
                 return R.style.AppTheme;
@@ -96,6 +102,18 @@ public class Utils {
             e.printStackTrace();
         }
         return writer.toString();
+    }
+
+    public static void replaceFragment(@Nullable FragmentManager fragmentManager,
+                                       @NonNull Fragment fragment, boolean addToBackStack) {
+        if (fragmentManager != null) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(android.R.id.content, fragment);
+            if (addToBackStack) {
+                fragmentTransaction.addToBackStack(null);
+            }
+            fragmentTransaction.commit();
+        }
     }
 
 }

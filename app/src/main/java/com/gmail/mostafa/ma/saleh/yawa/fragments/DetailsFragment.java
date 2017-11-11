@@ -1,8 +1,8 @@
 package com.gmail.mostafa.ma.saleh.yawa.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +13,20 @@ import android.widget.TextView;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.models.Day;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.Constants;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.SharedPreferencesManager;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailsFragment extends Fragment {
 
-    private static final String ARG_DAY = "param_day";
-    private static final String ARG_DATE = "param_date";
+    private static final String PARAM_DAY = "param_day";
+    private static final String PARAM_DATE = "param_date";
 
     @BindView(R.id.tv_temp_max)
     TextView tvTempMax;
@@ -49,15 +50,11 @@ public class DetailsFragment extends Fragment {
     private Day mDay;
     private Date mDate;
 
-    public DetailsFragment() {
-        // Required empty public constructor
-    }
-
     public static DetailsFragment newInstance(Day day, Date date) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_DAY, day);
-        args.putSerializable(ARG_DATE, date);
+        args.putSerializable(PARAM_DAY, day);
+        args.putSerializable(PARAM_DATE, date);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,26 +63,31 @@ public class DetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mDay = (Day) getArguments().getSerializable(ARG_DAY);
-            mDate = (Date) getArguments().getSerializable(ARG_DATE);
+            mDay = (Day) getArguments().getSerializable(PARAM_DAY);
+            mDate = (Date) getArguments().getSerializable(PARAM_DATE);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View mainView = inflater.inflate(R.layout.fragment_details, container, false);
-        ButterKnife.bind(this, mainView);
-        getActivity().setTitle(new SimpleDateFormat("EEEE, MMMM dd", Locale.getDefault()).format(mDate));
-        tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(mDay.temp.max)));
-        tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(mDay.temp.min)));
-        tvStatus.setText(mDay.weather[0].main);
-        tvHumidity.setText(mDay.humidity == 0.0 ? "N/A" : String.format(Locale.getDefault(), "%d%%", Math.round(mDay.humidity)));
-        imgWeatherStatus.setImageResource(Utils.getArtResourceForWeatherCondition(mDay.weather[0].id));
-        tvPressure.setText(String.format(Locale.getDefault(), "%d %s", Math.round(mDay.pressure), getString(R.string.pressure_unit)));
-        tvWindSpeed.setText(String.format(Locale.getDefault(), "%d %s", Math.round(mDay.speed), getWindSpeedUnit()));
-        tvWindDirection.setText(getDirection(mDay.deg));
-        aprgClouds.setProgress(Math.round(mDay.clouds));
-        return mainView;
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_details, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+        if (getActivity() != null) {
+            getActivity().setTitle(StringUtils.formatDate(Constants.LONG_DATE_PATTERN, mDate));
+            tvTempMax.setText(StringUtils.format("%d°", Math.round(mDay.temp.max)));
+            tvTempMin.setText(StringUtils.format("%d°", Math.round(mDay.temp.min)));
+            tvStatus.setText(mDay.weather[0].main);
+            tvHumidity.setText(mDay.humidity == 0.0 ? "N/A" : StringUtils.format("%d%%", Math.round(mDay.humidity)));
+            imgWeatherStatus.setImageResource(Utils.getArtResourceForWeatherCondition(mDay.weather[0].id));
+            tvPressure.setText(StringUtils.format("%d %s", Math.round(mDay.pressure), getString(R.string.pressure_unit)));
+            tvWindSpeed.setText(StringUtils.format("%d %s", Math.round(mDay.speed), getWindSpeedUnit()));
+            tvWindDirection.setText(getDirection(mDay.deg));
+            aprgClouds.setProgress(Math.round(mDay.clouds));
+        }
     }
 
     private String getDirection(float angle) {
@@ -94,10 +96,12 @@ public class DetailsFragment extends Fragment {
     }
 
     private String getWindSpeedUnit() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        if (preferences.getString("temp_unit", "&units=metric").contains("imperial")) {
+        SharedPreferencesManager preferencesManager = SharedPreferencesManager.getInstance();
+        String tempUnits = preferencesManager.getString(Constants.KEY_TEMP_UNITS, "metric");
+        if (tempUnits.contains("imperial")) {
             return getString(R.string.wind_speed_unit_imperial);
+        } else {
+            return getString(R.string.wind_speed_unit_metric);
         }
-        return getString(R.string.wind_speed_unit_metric);
     }
 }

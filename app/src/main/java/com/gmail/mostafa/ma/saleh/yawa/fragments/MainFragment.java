@@ -3,6 +3,7 @@ package com.gmail.mostafa.ma.saleh.yawa.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,10 +23,10 @@ import com.gmail.mostafa.ma.saleh.yawa.adapters.DaysRecyclerAdapter;
 import com.gmail.mostafa.ma.saleh.yawa.models.Day;
 import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener;
 import com.gmail.mostafa.ma.saleh.yawa.retrofit.RetrofitManager;
+import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +49,10 @@ public class MainFragment extends Fragment {
     private DaysRecyclerAdapter daysRecyclerAdapter;
     private OnFinishedListener<Day[]> onFinishedListener;
 
+    public static MainFragment newInstance() {
+        return new MainFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +60,14 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mainView = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, mainView);
-        daysRecyclerAdapter = new DaysRecyclerAdapter(getContext(), null);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+        daysRecyclerAdapter = new DaysRecyclerAdapter(getContext());
         rvDays.setAdapter(daysRecyclerAdapter);
         rvDays.setLayoutManager(new LinearLayoutManager(getContext()));
         refresh();
@@ -74,14 +83,9 @@ public class MainFragment extends Fragment {
             public void onItemClick(View view, Day day, int position) {
                 Calendar c = Calendar.getInstance();
                 c.add(Calendar.DATE, position + 1);
-                getFragmentManager()
-                        .beginTransaction()
-                        .add(android.R.id.content, DetailsFragment.newInstance(day, c.getTime()))
-                        .addToBackStack(null)
-                        .commit();
+                Utils.replaceFragment(getFragmentManager(), DetailsFragment.newInstance(day, c.getTime()), true);
             }
         });
-        return mainView;
     }
 
     private void refresh() {
@@ -95,8 +99,8 @@ public class MainFragment extends Fragment {
         onFinishedListener = new OnFinishedListener<Day[]>() {
             @Override
             public void onSuccess(Day[] days) {
-                tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.max)));
-                tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.min)));
+                tvTempMax.setText(StringUtils.format("%d°", Math.round(days[0].temp.max)));
+                tvTempMin.setText(StringUtils.format("%d°", Math.round(days[0].temp.min)));
                 tvDescription.setText(days[0].weather[0].main);
                 imgWeatherIcon.setImageResource(Utils.getArtResourceForWeatherCondition(days[0].weather[0].id));
                 for (int i = 1; i < days.length; i++)
@@ -106,10 +110,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(android.R.id.content, new NoInternetFragment())
-                        .commit();
+                Utils.replaceFragment(getFragmentManager(), NoInternetFragment.newInstance(), false);
             }
 
             @Override
@@ -131,11 +132,7 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(android.R.id.content, new SettingsFragment())
-                        .addToBackStack(null)
-                        .commit();
+                Utils.replaceFragment(getFragmentManager(), SettingsFragment.newInstance(), true);
                 break;
         }
         return super.onOptionsItemSelected(item);
