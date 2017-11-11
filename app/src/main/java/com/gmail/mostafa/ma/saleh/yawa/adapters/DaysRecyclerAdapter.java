@@ -20,7 +20,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapter.ViewHolder> {
 
@@ -59,20 +58,6 @@ public class DaysRecyclerAdapter extends RecyclerView.Adapter<DaysRecyclerAdapte
             public void onClick(View v) {
                 if (onItemClickListener != null)
                     onItemClickListener.onItemClick(v, d, holder.getAdapterPosition());
-            }
-        });
-        holder.imgWeatherIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SimpleTooltip.Builder(mContext)
-                        .anchorView(v)
-                        .animated(true)
-                        .transparentOverlay(true)
-                        .text("Testing tooltips!!")
-                        .dismissOnOutsideTouch(true)
-                        .showArrow(true)
-                        .build()
-                        .show();
             }
         });
     }

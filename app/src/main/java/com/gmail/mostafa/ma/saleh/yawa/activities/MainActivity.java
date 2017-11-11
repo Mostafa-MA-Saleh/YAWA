@@ -8,26 +8,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.gmail.mostafa.ma.saleh.yawa.R;
 import com.gmail.mostafa.ma.saleh.yawa.fragments.MainFragment;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme(Utils.getTheme(Integer.parseInt(preferences.getString("theme", "0"))));
-        super.onCreate(savedInstanceState);
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        applyActionBar(getSupportFragmentManager().getBackStackEntryCount() == 0);
+        setupActionBar();
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                applyActionBar(getSupportFragmentManager().getBackStackEntryCount() == 0);
+                updateActionBar(getSupportFragmentManager().getBackStackEntryCount() == 0);
             }
         });
 
@@ -39,12 +38,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void applyActionBar(boolean home) {
+    private void setupActionBar() {
         assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(!home);
-        getSupportActionBar().setDisplayUseLogoEnabled(home);
-        if (home) {
-            setTitle(R.string.app_name_long);
+        getSupportActionBar().setElevation(0);
+        updateActionBar(getSupportFragmentManager().getBackStackEntryCount() == 0);
+    }
+
+    private void updateActionBar(boolean forHome) {
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(!forHome);
+        if (forHome) {
+            setTitle(new SimpleDateFormat("'Today,' MMMM dd", Locale.getDefault()).format(new Date()));
         }
     }
 

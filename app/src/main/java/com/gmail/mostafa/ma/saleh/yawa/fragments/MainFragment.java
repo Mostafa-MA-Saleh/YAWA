@@ -24,9 +24,7 @@ import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener;
 import com.gmail.mostafa.ma.saleh.yawa.retrofit.RetrofitManager;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -36,8 +34,6 @@ public class MainFragment extends Fragment {
 
     @BindView(R.id.days_rv)
     RecyclerView rvDays;
-    @BindView(R.id.tv_date)
-    TextView tvDate;
     @BindView(R.id.tv_temp_max)
     TextView tvTempMax;
     @BindView(R.id.tv_temp_min)
@@ -99,7 +95,6 @@ public class MainFragment extends Fragment {
         onFinishedListener = new OnFinishedListener<Day[]>() {
             @Override
             public void onSuccess(Day[] days) {
-                tvDate.setText(new SimpleDateFormat("'Today,' MMMM dd", Locale.getDefault()).format(new Date()));
                 tvTempMax.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.max)));
                 tvTempMin.setText(String.format(Locale.getDefault(), "%d°", Math.round(days[0].temp.min)));
                 tvDescription.setText(days[0].weather[0].main);

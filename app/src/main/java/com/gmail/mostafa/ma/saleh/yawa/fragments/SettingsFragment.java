@@ -14,13 +14,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.gmail.mostafa.ma.saleh.yawa.R;
+import com.gmail.mostafa.ma.saleh.yawa.dialogs.AboutDialog;
 import com.gmail.mostafa.ma.saleh.yawa.models.City;
 import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.DialogUtils;
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Utils;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPicker;
-import com.gmail.mostafa.ma.saleh.yawa.utilities.countrypicker.CountryPickerListener;
 import com.google.gson.Gson;
+import com.mukesh.countrypicker.CountryPicker;
+import com.mukesh.countrypicker.CountryPickerListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,11 +41,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         countryPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                CountryPicker picker = CountryPicker.newInstance("Select City");
-                picker.show(getFragmentManager(), "COUNTRY_PICKER");
+                CountryPicker picker = CountryPicker.newInstance("Select Country");  // dialog title
                 picker.setListener(new CountryPickerListener() {
                     @Override
-                    public void onSelectCountry(String name, final String code) {
+                    public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
                         PreferenceManager
                                 .getDefaultSharedPreferences(getContext())
                                 .edit()
@@ -52,6 +52,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 .apply();
                     }
                 });
+                if (getFragmentManager() != null) {
+                    picker.show(getFragmentManager(), "COUNTRY_PICKER");
+                }
                 return true;
             }
         });
@@ -87,6 +90,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 getActivity().recreate();
                 return true;
+            }
+        });
+        findPreference("about").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AboutDialog.show(getContext());
+                return false;
             }
         });
     }

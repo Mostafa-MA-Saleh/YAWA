@@ -33,4 +33,11 @@
             android:title="@string/theme" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Info">
+        <Preference
+            android:key="about"
+            android:summary="About YAWA"
+            android:title="@string/about" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

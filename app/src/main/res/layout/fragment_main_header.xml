@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
@@ -11,18 +10,12 @@
     android:paddingTop="10dp">
 
     <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
-
-    <TextView
         android:id="@+id/tv_temp_max"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_date"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="10dp"
+        android:layout_toStartOf="@id/img_weather_icon"
         android:textColor="@android:color/white"
         android:textSize="60sp" />
 
@@ -30,8 +23,10 @@
         android:id="@+id/tv_temp_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_temp_max"
         android:layout_marginTop="10dp"
+        android:layout_toStartOf="@id/img_weather_icon"
         android:textColor="@android:color/white"
         android:textSize="40sp" />
 
@@ -40,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tv_date"
+        android:contentDescription="@string/weather_status_icon"
         android:src="@drawable/art_clear" />
 
     <TextView
@@ -53,6 +48,5 @@
         android:gravity="center"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
-
 
 </RelativeLayout>

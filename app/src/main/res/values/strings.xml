@@ -6,7 +6,7 @@
 
     <string name="search">Search&#8230;</string>
 
-    <string name="default_temp_unit">&amp;units=metric</string>
+    <string name="default_temp_unit">metric</string>
     <string name="default_theme">0</string>
 
     <string name="weather_status_icon">Weather Status Icon</string>
@@ -24,23 +24,11 @@
     <string name="wind_speed_unit_metric">km/h</string>
     <string name="wind_speed_unit_imperial">mph</string>
 
-    <string-array name="directions">
-        <item>N</item>
-        <item>NNE</item>
-        <item>NE</item>
-        <item>ENE</item>
-        <item>E</item>
-        <item>ESE</item>
-        <item>SE</item>
-        <item>SSE</item>
-        <item>S</item>
-        <item>SSW</item>
-        <item>SW</item>
-        <item>WSW</item>
-        <item>W</item>
-        <item>WNW</item>
-        <item>NW</item>
-        <item>NNW</item>
-    </string-array>
+    <string name="app_icon">App Icon</string>
+    <string name="website_url">https://www.linkedin.com/in/mostafa-saleh/</string>
+    <string name="legal_notice"><p align="justify">Not liable for any damage incurred from use of this software including but not limited to: monetary loss, temporary paralysis, halitosis, spontaneous combustion, road rash, and or premature hair loss.</p></string>
+    <string name="phone_number">+201062182654</string>
+
+    <string name="about">About</string>
 
 </resources>
