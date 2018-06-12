@@ -10,14 +10,10 @@ import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils
 
 class MainActivity : AppCompatActivity() {
 
-    private val isBackStackEmpty: Boolean
-        get() = supportFragmentManager.backStackEntryCount == 0
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(ResourcesUtils.getTheme())
         setupActionBar()
-        supportFragmentManager.addOnBackStackChangedListener { updateActionBar(isBackStackEmpty) }
         if (savedInstanceState == null) {
             addHomeFragment()
         }
@@ -32,12 +28,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupActionBar() {
         supportActionBar?.elevation = 0f
-        updateActionBar(isBackStackEmpty)
+        updateActionBar()
+        supportFragmentManager.addOnBackStackChangedListener { updateActionBar() }
     }
 
-    private fun updateActionBar(forHome: Boolean) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(!forHome)
-        if (forHome) {
+    private fun updateActionBar() {
+        val backStackEmpty = supportFragmentManager.backStackEntryCount == 0
+        supportActionBar?.setDisplayHomeAsUpEnabled(!backStackEmpty)
+        if (backStackEmpty) {
             title = StringUtils.formatCurrentDate(Constants.TODAY_DATE_PATTERN)
         }
     }

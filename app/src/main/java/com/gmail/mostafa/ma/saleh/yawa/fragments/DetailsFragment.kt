@@ -54,15 +54,17 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findViewsById(view)
         activity?.title = StringUtils.formatDate(Constants.LONG_DATE_PATTERN, mDate!!)
-        tvTempMax?.text = String.format("%d°", Math.round(mDay!!.temperature.max))
-        tvTempMin?.text = String.format("%d°", Math.round(mDay!!.temperature.min))
-        tvStatus?.text = mDay!!.weather[0].main
-        tvHumidity?.text = if (mDay!!.humidity == 0) "N/A" else String.format("%d%%", mDay!!.humidity)
-        imgWeatherStatus?.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(mDay!!.weather[0].id))
-        tvPressure?.text = String.format("%d %s", Math.round(mDay!!.pressure), getString(R.string.pressure_unit))
-        tvWindSpeed?.text = String.format("%d %s", Math.round(mDay!!.windSpeed), windSpeedUnit)
-        tvWindDirection?.text = getDirection(mDay!!.windDirection)
-        aprgClouds?.progress = Math.round(mDay!!.clouds).toInt()
+        mDay?.run {
+            tvTempMax?.text = String.format("%d°", Math.round(temperature.max))
+            tvTempMin?.text = String.format("%d°", Math.round(temperature.min))
+            tvStatus?.text = weather[0].main
+            tvHumidity?.text = if (humidity == 0) "N/A" else String.format("%d%%", humidity)
+            imgWeatherStatus?.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(weather[0].id))
+            tvPressure?.text = String.format("%d %s", Math.round(pressure), getString(R.string.pressure_unit))
+            tvWindSpeed?.text = String.format("%d %s", Math.round(windSpeed), windSpeedUnit)
+            tvWindDirection?.text = getDirection(windDirection)
+            aprgClouds?.progress = Math.round(clouds).toInt()
+        }
     }
 
     private fun findViewsById(view: View) = with(view) {
@@ -88,12 +90,11 @@ class DetailsFragment : Fragment() {
         private const val PARAM_DATE = "param_date"
 
         fun newInstance(day: Day, date: Date) = DetailsFragment().apply {
-            val args = with(Bundle()) {
+            arguments = with(Bundle()) {
                 putParcelable(PARAM_DAY, day)
                 putSerializable(PARAM_DATE, date)
                 return@with this
             }
-            arguments = args
             return this
         }
     }
