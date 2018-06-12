@@ -28,18 +28,18 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
     private val JSONArray.isEmpty
         get() = this.length() == 0
 
-    private var countryPref: Preference? = null
-    private var cityPref: Preference? = null
-    private var themePref: Preference? = null
-    private var aboutPref: Preference? = null
+    private lateinit var countryPref: Preference
+    private lateinit var cityPref: Preference
+    private lateinit var themePref: Preference
+    private lateinit var aboutPref: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
         findPreferences()
-        countryPref?.onPreferenceClickListener = this
-        cityPref?.onPreferenceClickListener = this
-        themePref?.onPreferenceChangeListener = this
-        aboutPref?.onPreferenceClickListener = this
+        countryPref.onPreferenceClickListener = this
+        cityPref.onPreferenceClickListener = this
+        themePref.onPreferenceChangeListener = this
+        aboutPref.onPreferenceClickListener = this
     }
 
     private fun findPreferences() {

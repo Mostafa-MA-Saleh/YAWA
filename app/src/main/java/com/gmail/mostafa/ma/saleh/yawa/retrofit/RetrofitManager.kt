@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitManager {
-    private var requests: Requests = buildClient().create(Requests::class.java)
+    private val requests by lazy { buildClient().create(Requests::class.java) }
 
     private fun buildClient(): Retrofit {
         val logger = HttpLoggingInterceptor()

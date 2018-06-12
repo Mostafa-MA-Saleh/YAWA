@@ -19,14 +19,14 @@ import java.util.*
 
 class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
 
-    private var daysRecyclerView: RecyclerView? = null
-    private var tempMaxTextView: TextView? = null
-    private var tempMinTextView: TextView? = null
-    private var descriptionTextView: TextView? = null
-    private var weatherImageView: ImageView? = null
-    private var refreshLayout: SwipeRefreshLayout? = null
+    private lateinit var daysRecyclerView: RecyclerView
+    private lateinit var tempMaxTextView: TextView
+    private lateinit var tempMinTextView: TextView
+    private lateinit var descriptionTextView: TextView
+    private lateinit var weatherImageView: ImageView
+    private lateinit var refreshLayout: SwipeRefreshLayout
 
-    private var daysRecyclerAdapter: DaysRecyclerAdapter? = null
+    private val daysRecyclerAdapter by lazy { DaysRecyclerAdapter(context!!) }
     private var onFinishedListener: OnFinishedListener<List<Day>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +40,11 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findViewsById(view)
-        daysRecyclerAdapter = DaysRecyclerAdapter(context!!)
-        daysRecyclerView?.adapter = daysRecyclerAdapter
+        daysRecyclerView.adapter = daysRecyclerAdapter
         refresh()
-        refreshLayout?.isRefreshing = true
-        refreshLayout?.setOnRefreshListener { refresh() }
-        daysRecyclerAdapter?.setOnItemClickListener(this)
+        refreshLayout.isRefreshing = true
+        refreshLayout.setOnRefreshListener { refresh() }
+        daysRecyclerAdapter.setOnItemClickListener(this)
     }
 
     private fun findViewsById(view: View) = with(view) {
@@ -58,21 +57,21 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
     }
 
     fun refresh() {
-        daysRecyclerAdapter?.clear()
+        daysRecyclerAdapter.clear()
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val cityId = preferences.getString("city", "524901")
         val tempUnit = preferences.getString("temp_unit", "metric")
         onFinishedListener?.cancel()
         onFinishedListener = object : OnFinishedListener<List<Day>>() {
             override fun onSuccess(arg: List<Day>) {
-                tempMaxTextView?.text = String.format("%d°", Math.round(arg[0].temperature.max))
-                tempMinTextView?.text = String.format("%d°", Math.round(arg[0].temperature.min))
-                descriptionTextView?.text = arg[0].weather[0].main
-                weatherImageView?.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(arg[0].weather[0].id))
+                tempMaxTextView.text = String.format("%d°", Math.round(arg[0].temperature.max))
+                tempMinTextView.text = String.format("%d°", Math.round(arg[0].temperature.min))
+                descriptionTextView.text = arg[0].weather[0].main
+                weatherImageView.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(arg[0].weather[0].id))
                 for (i in 1 until arg.size) {
-                    daysRecyclerAdapter?.add(arg[i])
+                    daysRecyclerAdapter.add(arg[i])
                 }
-                refreshLayout?.isRefreshing = false
+                refreshLayout.isRefreshing = false
             }
 
             override fun onFailure(message: String?) {

@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class City(@SerializedName("id")
            @Expose
-           var id: String,
+           val id: String,
            @SerializedName("name")
            @Expose
-           var name: String) : Parcelable
+           val name: String) : Parcelable

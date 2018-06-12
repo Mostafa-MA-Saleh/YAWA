@@ -8,60 +8,60 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Day(@SerializedName("date")
                @Expose
-               var date: Int = 0,
+               val date: Int,
                @SerializedName("temp")
                @Expose
-               var temperature: Temperature,
+               val temperature: Temperature,
                @SerializedName("pressure")
                @Expose
-               var pressure: Double = 0.0,
+               val pressure: Double,
                @SerializedName("humidity")
                @Expose
-               var humidity: Int = 0,
+               val humidity: Int,
                @SerializedName("weather")
                @Expose
-               var weather: List<Weather>,
+               val weather: List<Weather>,
                @SerializedName("windSpeed")
                @Expose
-               var windSpeed: Double = 0.0,
+               val windSpeed: Double,
                @SerializedName("windDirection")
                @Expose
-               var windDirection: Double = 0.0,
+               val windDirection: Double,
                @SerializedName("clouds")
                @Expose
-               var clouds: Double = 0.0) : Parcelable {
+               val clouds: Double) : Parcelable {
 
     @Parcelize
     data class Weather(@SerializedName("id")
                        @Expose
-                       var id: Int = 0,
+                       val id: Int,
                        @SerializedName("main")
                        @Expose
-                       var main: String? = null,
+                       val main: String,
                        @SerializedName("description")
                        @Expose
-                       var description: String? = null,
+                       val description: String,
                        @SerializedName("icon")
                        @Expose
-                       var icon: String? = null) : Parcelable
+                       val icon: String) : Parcelable
 
     @Parcelize
     data class Temperature(@SerializedName("day")
                            @Expose
-                           var day: Double = 0.0,
+                           val day: Double,
                            @SerializedName("min")
                            @Expose
-                           var min: Double = 0.0,
+                           val min: Double,
                            @SerializedName("max")
                            @Expose
-                           var max: Double = 0.0,
+                           val max: Double,
                            @SerializedName("night")
                            @Expose
-                           var night: Double = 0.0,
+                           val night: Double,
                            @SerializedName("eve")
                            @Expose
-                           var eve: Double = 0.0,
+                           val eve: Double,
                            @SerializedName("morn")
                            @Expose
-                           var morn: Double = 0.0) : Parcelable
+                           val morn: Double) : Parcelable
 }

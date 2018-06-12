@@ -11,6 +11,7 @@ import com.gmail.mostafa.ma.saleh.yawa.R
 import com.gmail.mostafa.ma.saleh.yawa.models.Day
 import com.gmail.mostafa.ma.saleh.yawa.utilities.ResourcesUtils
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerAdapter.ViewHolder>() {
 

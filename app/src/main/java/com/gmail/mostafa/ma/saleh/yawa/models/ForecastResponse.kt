@@ -6,4 +6,4 @@ import com.google.gson.annotations.SerializedName
 data class ForecastResponse(
         @SerializedName("list")
         @Expose
-        var days: List<Day>)
+        val days: List<Day>)
