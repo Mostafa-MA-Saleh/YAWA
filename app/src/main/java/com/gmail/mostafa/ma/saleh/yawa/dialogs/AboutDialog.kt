@@ -14,7 +14,7 @@ class AboutDialog private constructor(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_about)
         setTitle(R.string.about)
-        findViewById<TextView>(R.id.txt_app_version).text = BuildConfig.VERSION_NAME
+        findViewById<TextView>(R.id.app_version_text_view).text = BuildConfig.VERSION_NAME
     }
 
     companion object {

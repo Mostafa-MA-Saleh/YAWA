@@ -19,12 +19,12 @@ import java.util.*
 
 class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
 
-    internal var rvDays: RecyclerView? = null
-    internal var tvTempMax: TextView? = null
-    internal var tvTempMin: TextView? = null
-    internal var tvDescription: TextView? = null
-    internal var imgWeatherIcon: ImageView? = null
-    internal var refreshLayout: SwipeRefreshLayout? = null
+    private var daysRecyclerView: RecyclerView? = null
+    private var tempMaxTextView: TextView? = null
+    private var tempMinTextView: TextView? = null
+    private var descriptionTextView: TextView? = null
+    private var weatherImageView: ImageView? = null
+    private var refreshLayout: SwipeRefreshLayout? = null
 
     private var daysRecyclerAdapter: DaysRecyclerAdapter? = null
     private var onFinishedListener: OnFinishedListener<List<Day>>? = null
@@ -41,7 +41,7 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findViewsById(view)
         daysRecyclerAdapter = DaysRecyclerAdapter(context!!)
-        rvDays?.adapter = daysRecyclerAdapter
+        daysRecyclerView?.adapter = daysRecyclerAdapter
         refresh()
         refreshLayout?.isRefreshing = true
         refreshLayout?.setOnRefreshListener { refresh() }
@@ -49,11 +49,11 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
     }
 
     private fun findViewsById(view: View) = with(view) {
-        rvDays = findViewById(R.id.days_rv)
-        tvTempMax = findViewById(R.id.tv_temp_max)
-        tvTempMin = findViewById(R.id.tv_temp_min)
-        tvDescription = findViewById(R.id.tv_description)
-        imgWeatherIcon = findViewById(R.id.img_weather_icon)
+        daysRecyclerView = findViewById(R.id.days_recycler_view)
+        tempMaxTextView = findViewById(R.id.temp_max_text_view)
+        tempMinTextView = findViewById(R.id.temp_min_text_view)
+        descriptionTextView = findViewById(R.id.tv_description)
+        weatherImageView = findViewById(R.id.weather_image_view)
         refreshLayout = findViewById(R.id.refresh)
     }
 
@@ -65,10 +65,10 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
         onFinishedListener?.cancel()
         onFinishedListener = object : OnFinishedListener<List<Day>>() {
             override fun onSuccess(arg: List<Day>) {
-                tvTempMax?.text = String.format("%d°", Math.round(arg[0].temperature.max))
-                tvTempMin?.text = String.format("%d°", Math.round(arg[0].temperature.min))
-                tvDescription?.text = arg[0].weather[0].main
-                imgWeatherIcon?.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(arg[0].weather[0].id))
+                tempMaxTextView?.text = String.format("%d°", Math.round(arg[0].temperature.max))
+                tempMinTextView?.text = String.format("%d°", Math.round(arg[0].temperature.min))
+                descriptionTextView?.text = arg[0].weather[0].main
+                weatherImageView?.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(arg[0].weather[0].id))
                 for (i in 1 until arg.size) {
                     daysRecyclerAdapter?.add(arg[i])
                 }
@@ -94,7 +94,7 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_settings -> FragmentUtils.replaceFragment(fragmentManager, SettingsFragment.newInstance(), true)
+            R.id.action_settings -> FragmentUtils.replaceFragment(fragmentManager, SettingsFragment.newInstance())
         }
         return super.onOptionsItemSelected(item)
     }

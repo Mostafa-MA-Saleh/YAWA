@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.gmail.mostafa.ma.saleh.yawa.fragments.NoInternetFragment">
+    tools:context=".fragments.NoInternetFragment">
 
     <ImageView
         android:layout_width="wrap_content"

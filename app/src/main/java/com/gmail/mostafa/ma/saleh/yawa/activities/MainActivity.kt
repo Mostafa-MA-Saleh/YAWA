@@ -3,7 +3,7 @@ package com.gmail.mostafa.ma.saleh.yawa.activities
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.gmail.mostafa.ma.saleh.yawa.fragments.MainFragment
+import com.gmail.mostafa.ma.saleh.yawa.R
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Constants
 import com.gmail.mostafa.ma.saleh.yawa.utilities.ResourcesUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils
@@ -13,17 +13,8 @@ class MainActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(ResourcesUtils.getTheme())
+        setContentView(R.layout.activity_main)
         setupActionBar()
-        if (savedInstanceState == null) {
-            addHomeFragment()
-        }
-    }
-
-    private fun addHomeFragment() {
-        supportFragmentManager
-                .beginTransaction()
-                .add(android.R.id.content, MainFragment())
-                .commit()
     }
 
     private fun setupActionBar() {

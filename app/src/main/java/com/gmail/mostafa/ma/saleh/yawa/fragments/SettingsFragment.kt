@@ -1,7 +1,9 @@
 package com.gmail.mostafa.ma.saleh.yawa.fragments
 
 import android.content.DialogInterface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
@@ -45,6 +47,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.background = ColorDrawable(ContextCompat.getColor(context!!, android.R.color.background_light))
         activity?.setTitle(R.string.settings)
     }
 

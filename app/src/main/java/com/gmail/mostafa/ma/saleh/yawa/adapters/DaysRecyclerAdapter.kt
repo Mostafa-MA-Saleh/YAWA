@@ -23,7 +23,7 @@ class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerA
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val contentView = layoutInflater.inflate(R.layout.days_rv_row, parent, false)
+        val contentView = layoutInflater.inflate(R.layout.list_item_day, parent, false)
         return ViewHolder(contentView)
     }
 
@@ -31,11 +31,11 @@ class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerA
         val day = mDataSet[position]
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DATE, position + 1)
-        tvDay.text = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
-        tvTempMax.text = String.format("%d°", Math.round(day.temperature.max))
-        tvTempMin.text = String.format("%d°", Math.round(day.temperature.min))
-        tvDescription.text = day.weather[0].main
-        imgWeatherIcon.setImageResource(ResourcesUtils.getIconResourceForWeatherCondition(day.weather[0].id))
+        dayTextView.text = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
+        tempMaxTextView.text = String.format("%d°", Math.round(day.temperature.max))
+        tempMinTextView.text = String.format("%d°", Math.round(day.temperature.min))
+        descriptionTextView.text = day.weather[0].main
+        weatherImageView.setImageResource(ResourcesUtils.getIconResourceForWeatherCondition(day.weather[0].id))
     }
 
     override fun getItemCount(): Int {
@@ -59,12 +59,11 @@ class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerA
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val imgWeatherIcon: ImageView = itemView.findViewById(R.id.img_weather_icon)
-        val tvDay: TextView = itemView.findViewById(R.id.tv_day)
-        val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
-        val tvTempMax: TextView = itemView.findViewById(R.id.tv_temp_max)
-        val tvTempMin: TextView = itemView.findViewById(R.id.tv_temp_min)
-        val row: View = itemView.findViewById(R.id.row)
+        val weatherImageView: ImageView = itemView.findViewById(R.id.weather_image_view)
+        val dayTextView: TextView = itemView.findViewById(R.id.day_text_view)
+        val descriptionTextView: TextView = itemView.findViewById(R.id.tv_description)
+        val tempMaxTextView: TextView = itemView.findViewById(R.id.temp_max_text_view)
+        val tempMinTextView: TextView = itemView.findViewById(R.id.temp_min_text_view)
 
         init {
             itemView.setOnClickListener(this)
