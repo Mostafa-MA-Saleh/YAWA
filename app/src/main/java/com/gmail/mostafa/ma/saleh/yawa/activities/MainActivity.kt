@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.gmail.mostafa.ma.saleh.yawa.R
+import com.gmail.mostafa.ma.saleh.yawa.fragments.MainFragment
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Constants
 import com.gmail.mostafa.ma.saleh.yawa.utilities.ResourcesUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils
@@ -36,5 +37,9 @@ class MainActivity : AppCompatActivity() {
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun refresh() {
+        (supportFragmentManager.findFragmentById(R.id.main_fragment) as? MainFragment)?.refresh()
     }
 }

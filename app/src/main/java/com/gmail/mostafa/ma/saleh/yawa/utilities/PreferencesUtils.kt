@@ -8,7 +8,7 @@ import android.preference.PreferenceManager
  * Created by Mostafa on 11/11/2017.
  */
 
-object SharedPreferencesManager {
+object PreferencesUtils {
 
     private var sharedPreferences: SharedPreferences? = null
 
@@ -21,7 +21,7 @@ object SharedPreferencesManager {
     }
 
     @JvmOverloads
-    fun getString(key: String, defValue: String = ""): String? {
-        return sharedPreferences?.getString(key, defValue)
+    fun getString(key: String, defValue: String = ""): String {
+        return sharedPreferences?.getString(key, defValue) ?: defValue
     }
 }

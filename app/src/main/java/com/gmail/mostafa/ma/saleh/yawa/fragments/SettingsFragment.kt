@@ -9,20 +9,24 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
 import android.widget.Toast
 import com.gmail.mostafa.ma.saleh.yawa.R
+import com.gmail.mostafa.ma.saleh.yawa.activities.MainActivity
 import com.gmail.mostafa.ma.saleh.yawa.dialogs.AboutDialog
 import com.gmail.mostafa.ma.saleh.yawa.models.City
 import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Constants
 import com.gmail.mostafa.ma.saleh.yawa.utilities.DialogUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.JSONUtils
-import com.gmail.mostafa.ma.saleh.yawa.utilities.SharedPreferencesManager
+import com.gmail.mostafa.ma.saleh.yawa.utilities.PreferencesUtils
 import com.google.gson.Gson
 import com.mukesh.countrypicker.CountryPicker
-import org.json.JSONException
-import org.json.JSONObject
+import org.json.JSONArray
 import java.util.*
 
+
 class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+
+    private val JSONArray.isEmpty
+        get() = this.length() == 0
 
     private var countryPref: Preference? = null
     private var cityPref: Preference? = null
@@ -47,7 +51,10 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.background = ColorDrawable(ContextCompat.getColor(context!!, android.R.color.background_light))
+        activity?.theme?.obtainStyledAttributes(intArrayOf(android.R.attr.colorBackground))?.let { attrs ->
+            val attributeResourceId = attrs.getResourceId(0, 0)
+            view.background = ColorDrawable(ContextCompat.getColor(context!!, attributeResourceId))
+        }
         activity?.setTitle(R.string.settings)
     }
 
@@ -70,17 +77,18 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
 
     private fun showCountryDialog() {
         val picker = CountryPicker.newInstance("Select Country")
-        picker.setListener { _, code, _, _ ->
-            SharedPreferencesManager.saveString(Constants.KEY_COUNTRY, code)
+        picker.setListener { _, countryCode, _, _ ->
+            picker.dismiss()
+            prepareToShowCitiesDialog(countryCode)
         }
         picker.show(childFragmentManager, "COUNTRY_PICKER")
     }
 
-    private fun prepareToShowCitiesDialog() {
+    private fun prepareToShowCitiesDialog(countryCode: String = PreferencesUtils.getString(Constants.KEY_COUNTRY, "EG")) {
         val progressDialog = DialogUtils.showProgressDialog(context!!)
         getCitiesList(object : OnFinishedListener<Array<City>>() {
             override fun onSuccess(arg: Array<City>) {
-                showCitiesDialog(arg)
+                showCitiesDialog(arg, countryCode)
             }
 
             override fun onFailure(message: String?) {
@@ -93,29 +101,29 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
                     super.onComplete(args, message)
                 }
             }
-        })
+        }, countryCode)
     }
 
-    private fun getCitiesList(onFinishedListener: OnFinishedListener<Array<City>>) {
+    private fun getCitiesList(onFinishedListener: OnFinishedListener<Array<City>>, countryCode: String) {
         Thread({
-            try {
-                val countryCode = SharedPreferencesManager.getString("country", "EG")
-                val json = JSONUtils.readFromResources(resources, R.raw.city_list)
-                val jsonObject = JSONObject(json)
-                val cityArray = jsonObject.optJSONArray(countryCode)
-                runOnUiThread { onFinishedListener.onComplete(Gson().fromJson(cityArray.toString(), Array<City>::class.java), null) }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-                runOnUiThread { onFinishedListener.onComplete(null, e.localizedMessage) }
+            val json = JSONUtils.readFromResources(resources, R.raw.city_list)
+            val jsonCityArray = json.optJSONArray(countryCode) ?: JSONArray()
+            if (jsonCityArray.isEmpty) {
+                runOnUiThread { onFinishedListener.onComplete(message = getString(R.string.country_not_supported)) }
+            } else {
+                val cityArray = Gson().fromJson(jsonCityArray.toString(), Array<City>::class.java)
+                runOnUiThread { onFinishedListener.onComplete(cityArray) }
             }
         }).start()
     }
 
-    private fun showCitiesDialog(cities: Array<City>) {
+    private fun showCitiesDialog(cities: Array<City>, countryCode: String) {
         val citiesNames = ArrayList<String>()
         for ((_, name) in cities) citiesNames.add(name)
         DialogUtils.showListDialog(context!!, citiesNames, DialogInterface.OnClickListener { dialog, which ->
-            SharedPreferencesManager.saveString(Constants.KEY_CITY, cities[which].id)
+            PreferencesUtils.saveString(Constants.KEY_CITY, cities[which].id)
+            PreferencesUtils.saveString(Constants.KEY_COUNTRY, countryCode)
+            (context as? MainActivity)?.refresh()
             dialog.dismiss()
         })
     }

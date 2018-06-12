@@ -31,4 +31,6 @@
 
     <string name="about">About</string>
 
+    <string name="country_not_supported">Sorry, this country is not supported!</string>
+
 </resources>

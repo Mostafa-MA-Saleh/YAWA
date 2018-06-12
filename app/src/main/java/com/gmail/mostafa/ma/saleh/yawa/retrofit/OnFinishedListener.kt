@@ -16,7 +16,7 @@ abstract class OnFinishedListener<T> {
     open fun onFailure(message: String?) {}
 
     @CallSuper
-    open fun onComplete(args: T?, message: String?) {
+    open fun onComplete(args: T? = null, message: String? = null) {
         if (!isCancelled) {
             if (args != null) {
                 onSuccess(args)

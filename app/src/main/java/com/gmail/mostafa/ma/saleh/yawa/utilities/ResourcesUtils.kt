@@ -5,7 +5,7 @@ import com.gmail.mostafa.ma.saleh.yawa.R
 object ResourcesUtils {
 
     fun getTheme(): Int {
-        val themeCode = SharedPreferencesManager.getString(Constants.KEY_THEME)
+        val themeCode = PreferencesUtils.getString(Constants.KEY_THEME)
         return when (themeCode) {
             "1" -> R.style.AppThemeDark
             else -> R.style.AppTheme

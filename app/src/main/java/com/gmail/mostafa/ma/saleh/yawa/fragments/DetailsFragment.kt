@@ -11,8 +11,8 @@ import com.github.lzyzsd.circleprogress.ArcProgress
 import com.gmail.mostafa.ma.saleh.yawa.R
 import com.gmail.mostafa.ma.saleh.yawa.models.Day
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Constants
+import com.gmail.mostafa.ma.saleh.yawa.utilities.PreferencesUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.ResourcesUtils
-import com.gmail.mostafa.ma.saleh.yawa.utilities.SharedPreferencesManager
 import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils
 import java.util.*
 
@@ -33,8 +33,8 @@ class DetailsFragment : Fragment() {
 
     private val windSpeedUnit: String
         get() {
-            val tempUnits = SharedPreferencesManager.getString(Constants.KEY_TEMP_UNITS, "metric")
-            return if (tempUnits?.contains("imperial") == true) {
+            val tempUnits = PreferencesUtils.getString(Constants.KEY_TEMP_UNITS, "metric")
+            return if (tempUnits.contains("imperial")) {
                 getString(R.string.wind_speed_unit_imperial)
             } else {
                 getString(R.string.wind_speed_unit_metric)

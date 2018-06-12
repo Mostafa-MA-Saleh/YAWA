@@ -8,5 +8,7 @@
     <color name="colorDarkPrimaryDark">#014980</color>
     <color name="colorDarkAccent">#FF4081</color>
 
+    <color name="colorBackground">?android:attr/colorBackground</color>
+
     <color name="light_grey">#DDDDDD</color>
 </resources>

@@ -57,7 +57,7 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
         refreshLayout = findViewById(R.id.refresh)
     }
 
-    private fun refresh() {
+    fun refresh() {
         daysRecyclerAdapter?.clear()
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val cityId = preferences.getString("city", "524901")

@@ -9,6 +9,6 @@ import android.app.Application
 class YawaApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        SharedPreferencesManager.init(this)
+        PreferencesUtils.init(this)
     }
 }
