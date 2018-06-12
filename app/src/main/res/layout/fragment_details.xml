@@ -70,7 +70,6 @@
         custom:arc_unfinished_color="@color/light_grey" />
 
     <TableLayout
-        android:id="@+id/details"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/aprg_clouds"
