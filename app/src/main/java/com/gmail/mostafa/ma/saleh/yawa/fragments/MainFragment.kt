@@ -3,11 +3,7 @@ package com.gmail.mostafa.ma.saleh.yawa.fragments
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import com.gmail.mostafa.ma.saleh.yawa.R
 import com.gmail.mostafa.ma.saleh.yawa.adapters.DaysRecyclerAdapter
 import com.gmail.mostafa.ma.saleh.yawa.models.Day
@@ -15,16 +11,11 @@ import com.gmail.mostafa.ma.saleh.yawa.retrofit.OnFinishedListener
 import com.gmail.mostafa.ma.saleh.yawa.retrofit.RetrofitManager
 import com.gmail.mostafa.ma.saleh.yawa.utilities.FragmentUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.ResourcesUtils
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main_header.*
 import java.util.*
 
-class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
-
-    private lateinit var daysRecyclerView: RecyclerView
-    private lateinit var tempMaxTextView: TextView
-    private lateinit var tempMinTextView: TextView
-    private lateinit var descriptionTextView: TextView
-    private lateinit var weatherImageView: ImageView
-    private lateinit var refreshLayout: SwipeRefreshLayout
+class MainFragment : Fragment() {
 
     private val daysRecyclerAdapter by lazy { DaysRecyclerAdapter(context!!) }
     private var onFinishedListener: OnFinishedListener<List<Day>>? = null
@@ -34,26 +25,15 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater.inflate(R.layout.fragment_main, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        findViewsById(view)
-        daysRecyclerView.adapter = daysRecyclerAdapter
+        days_recycler_view.adapter = daysRecyclerAdapter
         refresh()
-        refreshLayout.isRefreshing = true
-        refreshLayout.setOnRefreshListener { refresh() }
-        daysRecyclerAdapter.setOnItemClickListener(this)
-    }
-
-    private fun findViewsById(view: View) = with(view) {
-        daysRecyclerView = findViewById(R.id.days_recycler_view)
-        tempMaxTextView = findViewById(R.id.temp_max_text_view)
-        tempMinTextView = findViewById(R.id.temp_min_text_view)
-        descriptionTextView = findViewById(R.id.tv_description)
-        weatherImageView = findViewById(R.id.weather_image_view)
-        refreshLayout = findViewById(R.id.refresh)
+        refresh.isRefreshing = true
+        refresh.setOnRefreshListener { refresh() }
+        daysRecyclerAdapter.setOnItemClickListener(::onItemClick)
     }
 
     fun refresh() {
@@ -64,14 +44,14 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
         onFinishedListener?.cancel()
         onFinishedListener = object : OnFinishedListener<List<Day>>() {
             override fun onSuccess(arg: List<Day>) {
-                tempMaxTextView.text = String.format("%d°", Math.round(arg[0].temperature.max))
-                tempMinTextView.text = String.format("%d°", Math.round(arg[0].temperature.min))
-                descriptionTextView.text = arg[0].weather[0].main
-                weatherImageView.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(arg[0].weather[0].id))
+                temp_max_text_view.text = String.format("%d°", Math.round(arg[0].temperature.max))
+                temp_min_text_view.text = String.format("%d°", Math.round(arg[0].temperature.min))
+                tv_description.text = arg[0].weather[0].main
+                weather_image_view.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(arg[0].weather[0].id))
                 for (i in 1 until arg.size) {
                     daysRecyclerAdapter.add(arg[i])
                 }
-                refreshLayout.isRefreshing = false
+                refresh.isRefreshing = false
             }
 
             override fun onFailure(message: String?) {
@@ -98,7 +78,7 @@ class MainFragment : Fragment(), DaysRecyclerAdapter.OnItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(view: View, day: Day, position: Int) {
+    private fun onItemClick(view: View, day: Day, position: Int) {
         val c = Calendar.getInstance()
         c.add(Calendar.DATE, position + 1)
         FragmentUtils.replaceFragment(fragmentManager, DetailsFragment.newInstance(day, c.time))

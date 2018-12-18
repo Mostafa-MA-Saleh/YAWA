@@ -105,7 +105,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
     }
 
     private fun getCitiesList(onFinishedListener: OnFinishedListener<Array<City>>, countryCode: String) {
-        Thread({
+        Thread {
             val json = JSONUtils.readFromResources(resources, R.raw.city_list)
             val jsonCityArray = json.optJSONArray(countryCode) ?: JSONArray()
             if (jsonCityArray.isEmpty) {
@@ -114,7 +114,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
                 val cityArray = Gson().fromJson(jsonCityArray.toString(), Array<City>::class.java)
                 runOnUiThread { onFinishedListener.onComplete(cityArray) }
             }
-        }).start()
+        }.start()
     }
 
     private fun showCitiesDialog(cities: Array<City>, countryCode: String) {

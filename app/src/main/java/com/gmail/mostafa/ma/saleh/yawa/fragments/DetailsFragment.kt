@@ -5,28 +5,16 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import com.github.lzyzsd.circleprogress.ArcProgress
 import com.gmail.mostafa.ma.saleh.yawa.R
 import com.gmail.mostafa.ma.saleh.yawa.models.Day
 import com.gmail.mostafa.ma.saleh.yawa.utilities.Constants
 import com.gmail.mostafa.ma.saleh.yawa.utilities.PreferencesUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.ResourcesUtils
 import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils
+import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.*
 
 class DetailsFragment : Fragment() {
-
-    private lateinit var tempMaxTextView: TextView
-    private lateinit var tempMinTextView: TextView
-    private lateinit var weatherTextView: TextView
-    private lateinit var humidityTextView: TextView
-    private lateinit var windSpeedTextView: TextView
-    private lateinit var windDirectionTextView: TextView
-    private lateinit var pressureTextView: TextView
-    private lateinit var weatherImageView: ImageView
-    private lateinit var cloudsArcProgress: ArcProgress
 
     private var mDay: Day? = null
     private var mDate: Date? = null
@@ -52,31 +40,18 @@ class DetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        findViewsById(view)
         activity?.title = StringUtils.formatDate(Constants.LONG_DATE_PATTERN, mDate!!)
         mDay?.run {
-            tempMaxTextView.text = String.format("%d°", Math.round(temperature.max))
-            tempMinTextView.text = String.format("%d°", Math.round(temperature.min))
-            weatherTextView.text = weather[0].main
-            humidityTextView.text = if (humidity == 0) "N/A" else String.format("%d%%", humidity)
-            weatherImageView.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(weather[0].id))
-            pressureTextView.text = String.format("%d %s", Math.round(pressure), getString(R.string.pressure_unit))
-            windSpeedTextView.text = String.format("%d %s", Math.round(windSpeed), windSpeedUnit)
-            windDirectionTextView.text = getDirection(windDirection)
-            cloudsArcProgress.progress = Math.round(clouds).toInt()
+            temp_max_text_view.text = String.format("%d°", Math.round(temperature.max))
+            temp_min_text_view.text = String.format("%d°", Math.round(temperature.min))
+            weather_text_view.text = weather[0].main
+            tv_humidity.text = if (humidity == 0) "N/A" else String.format("%d%%", humidity)
+            weather_image_view.setImageResource(ResourcesUtils.getArtResourceForWeatherCondition(weather[0].id))
+            tv_pressure.text = String.format("%d %s", Math.round(pressure), getString(R.string.pressure_unit))
+            tv_wind_speed.text = String.format("%d %s", Math.round(windSpeed), windSpeedUnit)
+            tv_wind_direction.text = getDirection(windDirection)
+            clouds_arc_progress.progress = Math.round(clouds).toInt()
         }
-    }
-
-    private fun findViewsById(view: View) = with(view) {
-        tempMaxTextView = findViewById(R.id.temp_max_text_view)
-        tempMinTextView = findViewById(R.id.temp_min_text_view)
-        weatherTextView = findViewById(R.id.weather_text_view)
-        humidityTextView = findViewById(R.id.tv_humidity)
-        windSpeedTextView = findViewById(R.id.tv_wind_speed)
-        windDirectionTextView = findViewById(R.id.tv_wind_direction)
-        pressureTextView = findViewById(R.id.tv_pressure)
-        weatherImageView = findViewById(R.id.weather_image_view)
-        cloudsArcProgress = findViewById(R.id.clouds_arc_progress)
     }
 
     private fun getDirection(angle: Double): String {

@@ -9,15 +9,9 @@ import java.util.*
 
 object StringUtils {
 
-    fun formatCurrentDate(format: String): String {
-        return formatDate(format, System.currentTimeMillis())
-    }
+    fun formatCurrentDate(format: String) = formatDate(format, System.currentTimeMillis())
 
-    fun formatDate(format: String, date: Date): String {
-        return formatDate(format, date.time)
-    }
+    fun formatDate(format: String, date: Date) = formatDate(format, date.time)
 
-    fun formatDate(format: String, date: Long): String {
-        return SimpleDateFormat(format, Locale.getDefault()).format(date)
-    }
+    fun formatDate(format: String, date: Long) = SimpleDateFormat(format, Locale.getDefault()).format(date)
 }

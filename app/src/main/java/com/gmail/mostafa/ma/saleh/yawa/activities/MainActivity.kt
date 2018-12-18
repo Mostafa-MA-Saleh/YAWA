@@ -11,7 +11,7 @@ import com.gmail.mostafa.ma.saleh.yawa.utilities.StringUtils
 
 class MainActivity : AppCompatActivity() {
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(ResourcesUtils.getTheme())
         setContentView(R.layout.activity_main)

@@ -16,11 +16,11 @@ import kotlin.collections.ArrayList
 class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerAdapter.ViewHolder>() {
 
     private val mDataSet = ArrayList<Day>()
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClick: ((View, Day, Int) -> Unit)? = null
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener
+    fun setOnItemClickListener(onItemClick: ((View, Day, Int) -> Unit)) {
+        this.onItemClick = onItemClick
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,9 +39,7 @@ class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerA
         weatherImageView.setImageResource(ResourcesUtils.getIconResourceForWeatherCondition(day.weather[0].id))
     }
 
-    override fun getItemCount(): Int {
-        return mDataSet.size
-    }
+    override fun getItemCount() = mDataSet.size
 
     fun add(day: Day) = with(mDataSet) {
         add(day)
@@ -54,11 +52,7 @@ class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerA
         notifyItemRangeRemoved(0, size)
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(view: View, day: Day, position: Int)
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val weatherImageView: ImageView = itemView.findViewById(R.id.weather_image_view)
         val dayTextView: TextView = itemView.findViewById(R.id.day_text_view)
@@ -67,11 +61,7 @@ class DaysRecyclerAdapter(context: Context) : RecyclerView.Adapter<DaysRecyclerA
         val tempMinTextView: TextView = itemView.findViewById(R.id.temp_min_text_view)
 
         init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View) {
-            onItemClickListener?.onItemClick(v, mDataSet[adapterPosition], adapterPosition)
+            itemView.setOnClickListener { onItemClick?.invoke(it, mDataSet[adapterPosition], adapterPosition) }
         }
     }
 }
